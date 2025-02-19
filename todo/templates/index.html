@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo App</title>
+    <style>
+        /* Google Font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .todo-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .todo-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .todo-item.completed span {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        .todo-item:hover {
+            background: #e3f2fd;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 6px;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .check { background: green; }
+        .edit { background: orange; }
+        .delete { background: red; }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .add-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        button {
+            background: #4facfe;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #007bff;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <ul class="todo-list">
+            {% for todo in todos %}
+            <li class="todo-item {% if todo['done'] %} completed {% endif %}">
+                <input type="checkbox" name="done" {% if todo['done'] %} checked {% endif %} onchange="this.form.submit()">
+                <span>{{ todo['task'] }}</span>
+                <div class="actions">
+                    <a href="{{ url_for('check', index=loop.index0) }}" class="btn check">✔</a>
+                    <a href="{{ url_for('edit', index=loop.index0) }}" class="btn edit">✏</a>
+                    <a href="{{ url_for('delete', index=loop.index0) }}" class="btn delete">🗑</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <form action="{{ url_for('add') }}" method="post" class="add-form">
+            <input type="text" name="todo" required placeholder="Add a new task...">
+            <button type="submit">Add Todo</button>
+        </form>
+    </div>
+</body>
+</html>
